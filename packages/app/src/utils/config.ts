@@ -1,6 +1,9 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
+export const config = {
+  title: 'Key Passport',
+  description: 'Manage your your keys, attestations, ZK identities & proofs.',
+};
 export const metadata: Metadata = {
-  title: 'ZK Passport',
-  description: 'Manage your identity, proofs and attestations.',
-}
+  ...config,
+};

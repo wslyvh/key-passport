@@ -1,10 +1,10 @@
 'use client';
 import { FlaskComponent } from '@/components/flask';
 import { Bar } from '@/features';
-import { List } from '@/features/stamps/list';
+import { UploadPane } from '@/features/upload';
 import { useSnaps } from '@/providers/snapsProvider';
 
-export default function Home() {
+export default function Upload() {
   const snaps = useSnaps();
 
   if (snaps.loading) return <div>&nbsp;</div>;
@@ -13,12 +13,9 @@ export default function Home() {
   //   return <FlaskComponent />;
   // }
 
-
   return (
     <div>
-      <Bar />
-
-      <List />
+     <UploadPane />
     </div>
   );
 }

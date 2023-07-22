@@ -40,5 +40,6 @@ module.exports = {
     '**/build',
     '**/public',
     '**/.cache',
+    '**/packages/app/**',
   ],
 };
