@@ -1,8 +1,8 @@
 import { Stamp, StampTypes } from '@/types';
 import { SNAP_VERSION, defaultSnapOrigin } from '@/utils/snaps';
 
-export async function getEntropy(index: number = 0) {
-  console.log('SNAPS: getEntropy', index);
+export async function getEntropy(address: string, index: number = 0) {
+  console.log('SNAPS: getEntropy', address, index);
 
   return await window.ethereum.request({
     method: 'wallet_invokeSnap',
@@ -11,7 +11,7 @@ export async function getEntropy(index: number = 0) {
       request: {
         method: 'passport_getEntropy',
         params: {
-          salt: `semaphore:${index}`,
+          salt: `semaphore:${address}:${index}`,
         },
       },
     },
