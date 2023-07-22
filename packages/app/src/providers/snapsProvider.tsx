@@ -51,6 +51,21 @@ export function SnapsProvider(props: Props) {
     return <>{props.children}</>;
   }
 
+  window?.ethereum?.on('accountsChanged', handleAccountsChanged);
+
+  function handleAccountsChanged(accounts: any) {
+    let currentAccount = '';
+    if (accounts.length === 0) {
+      // MetaMask is locked or the user has not connected any accounts.
+      console.log('Please connect to MetaMask.');
+    } else if (accounts[0] !== currentAccount) {
+      setState((state) => ({
+        ...state,
+        account: accounts[0],
+      }));
+    }
+  }
+
   useEffect(() => {
     async function checkFlask() {
       const flask = await isFlask();

@@ -36,6 +36,7 @@ export async function connectSnap(
   snapId: string = defaultSnapOrigin,
   params: Record<'version' | string, unknown> = {},
 ) {
+
   await window.ethereum.request({
     method: 'wallet_requestSnaps',
     params: {

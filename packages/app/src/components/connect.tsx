@@ -21,8 +21,6 @@ export function Connect() {
         if (installed?.enabled) {
           console.log('Snap installed. Get account..');
           const accounts = await getAccounts();
-          console.log('ACCOUNTS', accounts);
-
           const state = {
             loading: false,
             connected: !!installed,
