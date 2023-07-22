@@ -28,7 +28,7 @@ export function verifyAttestation(data: any) {
   }
 }
 
-export async function getPublicAttestations() {
+export async function getPublicAttestations(recipient: string) {
   const offset = 0;
 
   const response = await fetch('https://easscan.org/graphql', {
@@ -36,43 +36,46 @@ export async function getPublicAttestations() {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: `{
-      attestations(take: ${defaultLimit} skip: ${offset} where: {
-        revoked: {
-          equals: false
-        }
-        attester: {
-          equals: "0x8289432ACD5EB0214B1C2526A5EDB480Aa06A9ab",
-          mode: insensitive
-        }
-        OR: [
-          {
-            expirationTime: {
-              gt: ${Math.floor(Date.now() / 1000)}
-            }
+    body: JSON.stringify({
+      query: `{
+        attestations(take: ${defaultLimit} skip: ${offset} where: {
+          revoked: {
+            equals: false
           }
-          {
-            expirationTime: {
-              equals: 0
-            }
+          recipient: {
+            equals: "${recipient}",
+            mode: insensitive
           }
-        ]
-        }) {
-        id
-        attester
-        recipient
-        revoked
-        data
-        decodedDataJson
-        time
-        timeCreated
-        schema {
+          OR: [
+            {
+              expirationTime: {
+                gt: ${Math.floor(Date.now() / 1000)}
+              }
+            }
+            {
+              expirationTime: {
+                equals: 0
+              }
+            }
+          ]
+          }) {
           id
-          schema
+          attester
+          recipient
+          revoked
+          data
+          decodedDataJson
+          time
+          timeCreated
+          schema {
+            id
+            schema
+          }
         }
-      }
-    }`,
+      }`,
+    }),
   });
-  const data = await response.json()
-  console.log('DATA', data);
+
+  const data = await response.json();
+  return data.data.attestations;
 }

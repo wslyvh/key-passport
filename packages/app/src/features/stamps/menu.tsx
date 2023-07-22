@@ -11,15 +11,16 @@ import { deleteStamp } from '@/services/snaps';
 dayjs.extend(relativeTime);
 
 interface Props {
-  stamp: Stamp;
+  id: string;
+  private?: boolean;
+  url?: string;
 }
 
 export function Menu(props: Props) {
   const snaps = useSnaps();
-  const data = JSON.parse(props.stamp.data);
 
   async function del() {
-    await deleteStamp(props.stamp.id);
+    await deleteStamp(props.id);
     snaps.refreshStamps();
   }
 
@@ -35,15 +36,14 @@ export function Menu(props: Props) {
         <li>
           <a>Details</a>
         </li>
-        <li>
-          <a onClick={() => del()}>Delete</a>
-        </li>
-        {props.stamp.type === 'eas' && (
+        {props.private && (
           <li>
-            <Link
-              href={`https://easscan.org/attestation/view/${data.sig.uid}`}
-              target="_blank"
-            >
+            <a onClick={() => del()}>Delete</a>
+          </li>
+        )}
+        {props.url && (
+          <li>
+            <Link href={props.url} target="_blank">
               Explorer
             </Link>
           </li>
