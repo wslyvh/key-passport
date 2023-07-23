@@ -14,7 +14,7 @@ export function AddButton() {
     const stamps = await getStamps();
     const semaphore = stamps.filter((stamp) => stamp.type === 'semaphore');
 
-    const entropy = await getEntropy(snaps.account, semaphore.length);
+    const entropy = await getEntropy('semaphore', snaps.account, semaphore.length);
     const identity = new Identity(entropy as string);
     console.log('Identity created', identity.commitment);
 
