@@ -2,9 +2,6 @@
 
 import { useSnaps } from '@/providers/snapsProvider';
 import { Stamp } from '@/types';
-import easLogo from '@/assets/images/eas.png';
-import semaphoreLogo from '@/assets/images/semaphore.png';
-import sshLogo from '@/assets/images/ssh.png';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useEffect, useState } from 'react';
@@ -47,31 +44,17 @@ export function List() {
       {snaps.stamps && tab === 'private' && (
         <div className="flex flex-col gap-4">
           {snaps.stamps.map((i: Stamp) => {
+            if (!i.id) return null;
+
             const data = JSON.parse(i.data) as any;
-
-            const id = i.id;
-            let image, creator;
-            if (i.type === 'eas') {
-              image = easLogo;
-              creator = data.signer;
-            }
-            if (i.type === 'semaphore') {
-              image = semaphoreLogo;
-            }
-            if (i.type === 'ssh') {
-              image = sshLogo;
-            }
-
-            if (!id || !image) return null;
 
             return (
               <Card
-                key={id}
+                key={i.id}
                 id={i.id}
                 type={i.type}
-                image={image}
                 created={i.created}
-                creator={creator}
+                creator={data.signer} // only if i.type === eas
                 private
               />
             );
@@ -87,7 +70,6 @@ export function List() {
                 key={i.id}
                 id={i.id}
                 type="eas"
-                image={easLogo}
                 created={i.timeCreated * 1000}
                 creator={i.attester}
               />

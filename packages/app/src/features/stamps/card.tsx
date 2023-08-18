@@ -6,13 +6,14 @@ import { TruncateMiddle } from '@/utils/format';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Menu } from './menu';
+import Link from 'next/link';
+import { Logo } from './logo';
 
 dayjs.extend(relativeTime);
 
 interface Props {
   id: string;
   type: StampTypes;
-  image: StaticImageData;
   created: number;
   creator?: string;
   private?: boolean;
@@ -26,12 +27,14 @@ export function Card(props: Props) {
     >
       <div className="avatar">
         <div className="w-12 rounded-full">
-          <Image src={props.image} alt={props.type} />
+          <Logo type={props.type} />
         </div>
       </div>
 
       <div className="flex-grow min-w-0">
-        <h2 className="truncate text-ellipsis">{props.id}</h2>
+        <h2 className="truncate text-ellipsis">
+          <Link href={`/${props.id}`}>{TruncateMiddle(props.id, 16)}</Link>
+        </h2>
         <div className="flex items-center gap-2 text-xs pt-1">
           <p className="shrink-0">{dayjs().to(props.created)}</p>
           {props.creator && (

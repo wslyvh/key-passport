@@ -4,7 +4,7 @@ import { Bar } from '@/features';
 import { UploadPane } from '@/features/upload';
 import { useSnaps } from '@/providers/snapsProvider';
 
-export default function Upload() {
+export default function UploadPage() {
   const snaps = useSnaps();
 
   if (snaps.loading) return <div>&nbsp;</div>;
