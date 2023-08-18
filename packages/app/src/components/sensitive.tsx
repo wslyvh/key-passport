@@ -29,6 +29,7 @@ export function SensitivePanel(props: Props) {
             </p>
           </div>
         )}
+
         {visible && <div>{props.children}</div>}
       </div>
     </div>

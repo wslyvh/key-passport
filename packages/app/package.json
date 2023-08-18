@@ -6,12 +6,17 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next dev"
+    "start": "next dev",
+    "run:semaphore": "ts-node ./src/scripts/semaphore.ts"
   },
   "dependencies": {
     "@ethereum-attestation-service/eas-sdk": "^0.29.1",
     "@metamask/providers": "^11.1.0",
+    "@semaphore-protocol/contracts": "^3.10.1",
+    "@semaphore-protocol/data": "^3.10.1",
+    "@semaphore-protocol/group": "^3.10.1",
     "@semaphore-protocol/identity": "^3.10.1",
+    "@semaphore-protocol/proof": "^3.10.1",
     "@tailwindcss/typography": "^0.5.9",
     "@types/node": "20.4.2",
     "@types/react": "18.2.15",
@@ -19,6 +24,7 @@
     "autoprefixer": "10.4.14",
     "daisyui": "^3.3.1",
     "dayjs": "^1.11.9",
+    "dotenv": "^16.3.1",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.11",
     "next": "13.4.11",
@@ -28,5 +34,8 @@
     "react-dropzone": "^14.2.3",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
   }
 }

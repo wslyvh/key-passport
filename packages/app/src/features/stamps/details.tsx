@@ -1,15 +1,10 @@
 'use client';
 
-import { useSnaps } from '@/providers/snapsProvider';
 import { Stamp } from '@/types';
-import Image from 'next/image';
-import easLogo from '@/assets/images/eas.png';
-import semaphoreLogo from '@/assets/images/semaphore.png';
-import { EllipsisIcon } from '@/assets/icons/ellipsis';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Logo } from './logo';
-import { SemaphoreDetails } from './details/semaphore';
+import { SemaphoreDetails } from './details/semaphore/semaphore';
 import { EasDetails } from './details/eas';
 import { TruncateMiddle } from '@/utils/format';
 
