@@ -2,7 +2,6 @@
 
 import { useSnaps } from '@/providers/snapsProvider';
 import { addStamp, getStamps, clearState } from '@/services/snaps';
-import { Identity } from '@semaphore-protocol/identity';
 
 export function Testing() {
   const snaps = useSnaps();
@@ -74,7 +73,9 @@ export function Testing() {
 
   return (
     <div className="mb-8 border border-1 p-4">
-      <p className="mb-2 text-xs">*Only used for testing purposes..</p>
+      <p className="mb-2 text-xs">
+        *ONLY USED FOR TESTING. <code>NODE_ENV</code> is in development mode.
+      </p>
       <div className="flex w-full gap-2 justify-between">
         <button className="btn btn-xs btn-error" onClick={() => add()}>
           Add

@@ -1,6 +1,5 @@
 'use client';
 
-import { FlaskComponent } from '@/components/flask';
 import { Details } from '@/features/stamps/details';
 import { useSnaps } from '@/providers/snapsProvider';
 import { Stamp } from '@/types';
@@ -9,10 +8,6 @@ import { useEffect, useState } from 'react';
 export default function DetailsPage({ params }: { params: { id: string } }) {
   const [stamp, setStamp] = useState<Stamp | undefined>();
   const snaps = useSnaps();
-
-  // if (!snaps.hasSnaps) {
-  //   return <FlaskComponent />;
-  // }
 
   useEffect(() => {
     const stamp = snaps.stamps.find((stamp) => stamp.id === params.id);

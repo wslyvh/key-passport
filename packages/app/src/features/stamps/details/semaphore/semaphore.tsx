@@ -11,7 +11,6 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useEffect, useState } from 'react';
 import { CreateGroupButton } from './add';
-import { Card } from '../../card';
 import Link from 'next/link';
 import { EllipsisIcon } from '@/assets/icons/ellipsis';
 import { useSnaps } from '@/providers/snapsProvider';
@@ -29,7 +28,7 @@ export function SemaphoreDetails({ stamp }: Props) {
 
   useEffect(() => {
     async function getGroups() {
-      console.log('STAMP', stamp);
+      console.log('Fetch Semaphore groups', stamp.id);
       const client = new SemaphoreSubgraph();
       const groups = await client.getGroups({
         members: true,
@@ -102,7 +101,7 @@ export function SemaphoreDetails({ stamp }: Props) {
                     </h2>
                     <div className="flex items-center gap-2 text-xs pt-1">
                       {group.members && (
-                        <p className="shrink-0">{group.members.length}</p>
+                        <p className="shrink-0">{group.members.length} member(s)</p>
                       )}
                       {group.admin && (
                         <>

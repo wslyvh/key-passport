@@ -1,8 +1,9 @@
 export type SnapsResponse = Record<string, Snap>;
 
 export interface Snap {
-  permissionName: string;
   id: string;
   version: string;
+  blocked: boolean;
+  enabled: boolean;
   initialPermissions: Record<string, unknown>;
 }

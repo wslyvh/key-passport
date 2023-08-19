@@ -47,6 +47,12 @@ export function AddButton() {
         <li>
           <Link href="upload">Upload</Link>
         </li>
+        <li>
+          <a href="#" className="stat-desc">SSH Keys (soon)</a>
+        </li>
+        <li>
+          <a href="#" className="stat-desc">PGP Keys (soon)</a>
+        </li>
       </ul>
     </div>
   );

@@ -1,12 +1,6 @@
 import { PlusIcon } from '@/assets/icons/plus';
 import { useSnaps } from '@/providers/snapsProvider';
-import { addStamp, getEntropy, getStamps } from '@/services/snaps';
 import { Stamp } from '@/types';
-import { Group } from '@semaphore-protocol/group';
-import { Identity } from '@semaphore-protocol/identity';
-import { generateProof } from '@semaphore-protocol/proof';
-import Link from 'next/link';
-import { JsxEmit } from 'typescript';
 
 interface Props {
   stamp: Stamp;
@@ -39,8 +33,12 @@ export function CreateGroupButton({ stamp }: Props) {
         tabIndex={0}
         className="dropdown-content z-[1] menu p-2 mt-2 shadow bg-base-100 rounded-box w-52"
       >
-        <li>Create Group (soon)</li>
-        <li>Join Group (soon)</li>
+        <li>
+          <a href="#" className="stat-desc">Create Group (soon)</a>
+        </li>
+        <li>
+          <a href="#" className="stat-desc">Join Group (soon)</a>
+        </li>
       </ul>
     </div>
   );

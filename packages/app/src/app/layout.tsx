@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
 import { SnapsProvider } from '@/providers/snapsProvider';
+import { PageWrapper } from '@/components/page';
 import './globals.css';
 
 interface Props {
@@ -16,7 +17,9 @@ export default function RootLayout(props: Props) {
         <SnapsProvider>
           <div className="flex flex-col min-h-screen container max-w-xl mx-auto">
             <Header />
-            <main className="my-0 p-8 flex-grow">{props.children}</main>
+            <main className="my-0 p-8 flex-grow">
+              <PageWrapper>{props.children}</PageWrapper>
+            </main>
             <Footer />
           </div>
         </SnapsProvider>

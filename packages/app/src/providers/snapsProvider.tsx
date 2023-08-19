@@ -1,6 +1,6 @@
 import { getStamps } from '@/services/snaps';
 import { Stamp } from '@/types';
-import { isFlask } from '@/utils/snaps';
+import { connectSnap, getSnap, isFlask } from '@/utils/snaps';
 import {
   ReactNode,
   createContext,
@@ -8,6 +8,9 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { Snap } from '@/types/snaps';
+import MetaMaskSDK from '@metamask/sdk';
+import { getAccounts } from '@/utils/wallets';
 
 interface Props {
   children: ReactNode;
@@ -15,25 +18,25 @@ interface Props {
 
 interface SnapsState {
   loading: boolean;
-  connected: boolean;
-  hasSnaps: boolean;
+  isFlask: boolean;
   account: string;
   stamps: Stamp[];
+  snap?: Snap;
+  client?: MetaMaskSDK;
 }
 
 interface SnapStateContext extends SnapsState {
+  connect: () => Promise<void>;
   refreshStamps: () => Promise<void>;
-  updateState: (state: SnapsState) => Promise<void>;
 }
 
 const defaultState: SnapStateContext = {
   loading: true,
-  connected: false,
-  hasSnaps: false,
+  isFlask: false,
   account: '',
   stamps: [],
+  connect: async () => {},
   refreshStamps: async () => {},
-  updateState: async (state: SnapsState) => {},
 };
 
 export const useSnaps = () => useContext(SnapsContext);
@@ -43,71 +46,111 @@ const SnapsContext = createContext(defaultState);
 export function SnapsProvider(props: Props) {
   const [state, setState] = useState<SnapStateContext>({
     ...defaultState,
+    connect,
     refreshStamps,
-    updateState,
   });
 
   if (typeof window === 'undefined') {
     return <>{props.children}</>;
   }
 
-  window?.ethereum?.on('accountsChanged', handleAccountsChanged);
-
-  function handleAccountsChanged(accounts: any) {
-    let currentAccount = '';
-    if (accounts.length === 0) {
-      // MetaMask is locked or the user has not connected any accounts.
-      console.log('Please connect to MetaMask.');
-    } else if (accounts[0] !== currentAccount) {
-      setState((state) => ({
-        ...state,
-        account: accounts[0],
-      }));
-    }
-  }
-
   useEffect(() => {
-    async function checkFlask() {
+    async function init() {
+      // Check for correct MetaMask Flask client
+      console.log('SnapsProvider.isFlask');
       const flask = await isFlask();
+      if (!flask) {
+        setState((state) => ({
+          ...state,
+          loading: false,
+          isFlask: false,
+        }));
+        return;
+      }
 
-      setState((state) => ({
-        ...state,
-        loading: false,
-        hasSnaps: flask,
-      }));
-    }
+      // Get Snap installation
+      console.log('SnapsProvider.getSnap');
+      const snap = await getSnap();
+      if (!snap || !snap.enabled) {
+        console.log('Snap not found or not enabled');
+        setState((state) => ({
+          ...state,
+          loading: false,
+          isFlask: true,
+        }));
+        return;
+      }
 
-    async function getPassport() {
+      // Get Accounts
+      const accounts = await getAccounts();
+
+      // Get Stamps from Snap storage
+      console.log('SnapsProvider.fetchStamps');
       const stamps = await getStamps();
-
       setState((state) => ({
         ...state,
         loading: false,
+        isFlask: true,
         stamps: stamps,
+        account: accounts?.[0] ?? '',
+        snap: snap,
       }));
+      return;
     }
 
-    checkFlask();
-    getPassport();
+    init();
   }, []);
 
-  async function refreshStamps() {
-    console.log('refreshStamps');
-    const stamps = await getStamps();
+  useEffect(() => {
+    console.log('Init wallet events..');
 
-    setState((state) => ({
-      ...state,
-      stamps: stamps,
-    }));
+    const onAccountsChanged = (accounts: unknown) => {
+      console.log('SnapsProvider.onAccountsChanged', accounts);
+      setState((state) => ({
+        ...state,
+        account: (accounts as string[])?.[0] ?? undefined,
+      }));
+    };
+
+    window.ethereum?.on('accountsChanged', onAccountsChanged);
+
+    return () => {
+      console.debug(`SnapsProvider.cleanup`);
+      window.ethereum?.removeListener('accountsChanged', onAccountsChanged);
+    };
+  }, [state.client]);
+
+  async function connect() {
+    console.log('SnapsProvider.connect', state);
+
+    try {
+      await connectSnap();
+      const snap = await getSnap();
+
+      if (snap?.enabled) {
+        console.log('Installed Snap. Getting accounts..');
+        const accounts = await getAccounts();
+
+        setState((state) => ({
+          ...state,
+          loading: false,
+          isFlask: true,
+          account: accounts?.[0] ?? '',
+          snap: snap,
+        }));
+      }
+    } catch (e) {
+      console.log('Unable to install or connect to Snap');
+      console.error(e);
+    }
   }
 
-  async function updateState(newState: SnapsState) {
-    console.log('updateState', newState);
+  async function refreshStamps() {
+    console.log('SnapsProvider.refreshStamps');
     const stamps = await getStamps();
 
     setState((state) => ({
       ...state,
-      ...newState,
       stamps: stamps,
     }));
   }
