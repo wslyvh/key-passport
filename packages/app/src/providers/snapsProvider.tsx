@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { Snap } from '@/types/snaps';
 import MetaMaskSDK from '@metamask/sdk';
-import { getAccounts } from '@/utils/wallets';
+import { getAccounts, initSdk } from '@/utils/wallets';
 
 interface Props {
   children: ReactNode;
@@ -129,7 +129,8 @@ export function SnapsProvider(props: Props) {
 
       if (snap?.enabled) {
         console.log('Installed Snap. Getting accounts..');
-        const accounts = await getAccounts();
+        const sdk = await initSdk();
+        const accounts = await getAccounts(sdk);
 
         setState((state) => ({
           ...state,
@@ -137,6 +138,7 @@ export function SnapsProvider(props: Props) {
           isFlask: true,
           account: accounts?.[0] ?? '',
           snap: snap,
+          client: sdk,
         }));
       }
     } catch (e) {

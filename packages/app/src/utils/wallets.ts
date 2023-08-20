@@ -18,8 +18,8 @@ export async function initSdk() {
   return sdk;
 }
 
-export async function getAccounts() {
-  const sdk = await initSdk();
+export async function getAccounts(sdk?: MetaMaskSDK) {
+  if (!sdk) sdk = await initSdk();
   const provider = sdk.getProvider();
 
   const accounts = await provider.request({
