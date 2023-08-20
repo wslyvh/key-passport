@@ -1,6 +1,6 @@
 {
   "name": "key-passport",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Manage your your keys, attestations, ZK identities & proofs from your MetaMask wallet.",
   "repository": {
     "type": "git",
