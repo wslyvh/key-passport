@@ -2,14 +2,16 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "author": "wslyvh",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next dev",
     "run:index": "ts-node ./src/scripts/index.ts",
     "run:semaphore:create": "ts-node ./src/scripts/semaphore/create.ts",
-    "run:semaphore:join": "ts-node ./src/scripts/semaphore/join.ts"
+    "run:semaphore:join": "ts-node ./src/scripts/semaphore/join.ts",
+    "start": "next dev"
   },
   "dependencies": {
     "@ethereum-attestation-service/eas-sdk": "^0.29.1",
