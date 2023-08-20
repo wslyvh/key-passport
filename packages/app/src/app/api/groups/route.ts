@@ -1,10 +1,7 @@
+import { NextResponse } from 'next/server';
 import { Contract, providers, Wallet } from 'ethers';
 import SemaphoreABI from '../../../contracts/semaphore.json';
-
-export const SEMAPHORE_ADDRESS_SEPOLIA =
-  '0x3889927F0B5Eb1a02C6E2C20b39a1Bd4EAd76131';
-
-import { NextResponse } from 'next/server';
+import { SEMAPHORE_ADDRESS_SEPOLIA } from '@/utils/config';
 
 export async function GET(req: Request) {
   return NextResponse.json({ status: 200, data: [] });

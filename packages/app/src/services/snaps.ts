@@ -8,6 +8,8 @@ export async function getEntropy(
 ) {
   console.log('SNAPS: getEntropy', address, index);
 
+  if (!window.ethereum) throw new Error('No Ethereum provider');
+
   return await window.ethereum.request({
     method: 'wallet_invokeSnap',
     params: {
@@ -24,6 +26,8 @@ export async function getEntropy(
 
 export async function getStamps() {
   console.log('SNAPS: getStamps');
+
+  if (!window.ethereum) throw new Error('No Ethereum provider');
 
   const state: any = await window.ethereum.request({
     method: 'wallet_invokeSnap',
@@ -44,6 +48,8 @@ export async function getStamps() {
 
 export async function addStamp(type: StampTypes, id: string, data: string) {
   console.log('SNAPS: addStamp', type, data);
+
+  if (!window.ethereum) throw new Error('No Ethereum provider');
 
   const stamps = await getStamps();
   if (stamps.find((stamp) => stamp.type === type && stamp.id === id)) {
@@ -74,6 +80,8 @@ export async function addStamp(type: StampTypes, id: string, data: string) {
 export async function deleteStamp(id: string) {
   console.log('SNAPS: deleteStamp', id);
 
+  if (!window.ethereum) throw new Error('No Ethereum provider');
+
   await window.ethereum.request({
     method: 'wallet_invokeSnap',
     params: {
@@ -88,6 +96,8 @@ export async function deleteStamp(id: string) {
 
 export async function clearState() {
   console.log('SNAPS: clearState');
+
+  if (!window.ethereum) throw new Error('No Ethereum provider');
 
   await window.ethereum.request({
     method: 'wallet_invokeSnap',

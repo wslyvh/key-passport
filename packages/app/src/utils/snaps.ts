@@ -31,6 +31,8 @@ export async function isFlask() {
 }
 
 export async function getSnaps() {
+  if (!window.ethereum) throw new Error('No Ethereum provider');
+
   return (await window.ethereum.request({
     method: 'wallet_getSnaps',
   })) as unknown as SnapsResponse;
@@ -40,6 +42,8 @@ export async function connectSnap(
   snapId: string = defaultSnapOrigin,
   params: Record<'version' | string, unknown> = {},
 ) {
+  if (!window.ethereum) throw new Error('No Ethereum provider');
+
   await window.ethereum.request({
     method: 'wallet_requestSnaps',
     params: {

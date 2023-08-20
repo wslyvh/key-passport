@@ -6,7 +6,7 @@ const options = {
   enableDebug: true,
   dappMetadata: {
     name: config.title,
-    url: window.location.host,
+    url: '',
   },
 };
 

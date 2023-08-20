@@ -37,7 +37,9 @@ export function UploadPane() {
               snaps.account &&
               snaps.account !== data?.sig.message?.recipient
             ) {
-              setError('You are not the recipient of this attestation. Do you still want to add it?');
+              setError(
+                'You are not the recipient of this attestation. Do you still want to add it?',
+              );
               setRecipient(data?.sig.message?.recipient);
               return;
             }
@@ -122,7 +124,12 @@ export function UploadPane() {
       </div>
 
       <div>
-        <button className="btn btn-sm w-full btn-primary mt-4" onClick={() => confirmStamp()}>Confirm</button>
+        <button
+          className="btn btn-sm w-full btn-primary mt-4"
+          onClick={() => confirmStamp()}
+        >
+          Confirm
+        </button>
       </div>
     </>
   );
