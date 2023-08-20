@@ -4,7 +4,7 @@
   "proposedName": "Key Passport",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "https://github.com/wslyvh/key-passport.git"
   },
   "source": {
     "shasum": "gDrU7s936WWnl/IUndtAIsB2MYnxFLTalFFqTuJlcvU=",

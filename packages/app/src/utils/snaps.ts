@@ -6,7 +6,7 @@ export const SNAP_VERSION = 1;
 export const isLocalSnap = (snapId: string) => snapId.startsWith('local:');
 
 export const defaultSnapOrigin =
-  process.env.SNAP_ORIGIN ?? `local:http://localhost:8080`;
+  process.env.NEXT_PUBLIC_SNAP_ORIGIN ?? `local:http://localhost:8080`;
 
 export const shouldDisplayReconnectButton = (installedSnap?: Snap) =>
   installedSnap && isLocalSnap(installedSnap?.id);
@@ -51,6 +51,8 @@ export async function connectSnap(
 export async function getSnap(version?: string) {
   try {
     const snaps = await getSnaps();
+    console.log('SNAPS', snaps);
+    console.log('Origin', defaultSnapOrigin);
 
     return Object.values(snaps).find(
       (snap) =>
