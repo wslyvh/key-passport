@@ -69,6 +69,26 @@ export function SemaphoreDetails({ stamp }: Props) {
     document.body.removeChild(link);
   }
 
+  async function leaveGroup(groupId: string) {
+    if (!snaps.account) return;
+
+    const data = JSON.parse(stamp.data);
+    await manageGroup('leave', groupId, data.commitment.toString());
+    await onRefresh();
+  }
+
+  async function onRefresh() {
+    console.log('Refreshing Groups list..');
+    const client = new SemaphoreSubgraph();
+    const groups = await client.getGroups({
+      members: true,
+      verifiedProofs: true,
+    });
+
+    const myGroups = groups.filter((i) => i.members?.includes(stamp.id));
+    setGroups(myGroups);
+  }
+
   return (
     <>
       <SensitivePanel>
@@ -78,7 +98,7 @@ export function SemaphoreDetails({ stamp }: Props) {
       <div className="flex flex-col">
         <div className="flex justify-between items-center">
           <h3 className="text-gray-200">Groups</h3>
-          <CreateGroupButton stamp={stamp} />
+          <CreateGroupButton stamp={stamp} onRefresh={onRefresh} />
         </div>
 
         <div className="mt-4">
@@ -92,7 +112,7 @@ export function SemaphoreDetails({ stamp }: Props) {
               return (
                 <div
                   key={group.id}
-                  className="flex w-full bg-base-100 p-4 gap-4 rounded-lg"
+                  className="flex w-full bg-base-100 p-4 gap-4 mb-4 rounded-lg"
                 >
                   <div className="flex-grow min-w-0">
                     <h2 className="truncate text-ellipsis">
@@ -101,7 +121,9 @@ export function SemaphoreDetails({ stamp }: Props) {
                     </h2>
                     <div className="flex items-center gap-2 text-xs pt-1">
                       {group.members && (
-                        <p className="shrink-0">{group.members.length} member(s)</p>
+                        <p className="shrink-0">
+                          {group.members.length} member(s)
+                        </p>
                       )}
                       {group.admin && (
                         <>
@@ -126,6 +148,9 @@ export function SemaphoreDetails({ stamp }: Props) {
                         <a onClick={() => createProof(group)}>Generate Proof</a>
                       </li>
                       <li>
+                        <a onClick={() => leaveGroup(group.id)}>Leave group</a>
+                      </li>
+                      <li>
                         <Link
                           href="https://explorer.semaphore.appliedzkp.org/"
                           target="_blank"
@@ -142,4 +167,26 @@ export function SemaphoreDetails({ stamp }: Props) {
       </div>
     </>
   );
+}
+
+export async function manageGroup(
+  action: 'join' | 'leave',
+  groupId: string,
+  identityCommitment: string,
+) {
+  console.log('Managing Semaphore group', action, groupId, identityCommitment);
+
+  const res = await fetch('api/groups', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action,
+      groupId,
+      identityCommitment,
+    }),
+  });
+
+  const body = await res.json();
+  console.log('Group joined', body);
+  return body;
 }

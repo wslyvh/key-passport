@@ -1,17 +1,16 @@
 import { Contract, providers, Wallet } from 'ethers';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import SemaphoreABI from '../../contracts/semaphore.json';
+import SemaphoreABI from '../../../contracts/semaphore.json';
 
 export const SEMAPHORE_ADDRESS_SEPOLIA =
   '0x3889927F0B5Eb1a02C6E2C20b39a1Bd4EAd76131';
 
 import { NextResponse } from 'next/server';
 
-export async function GET(req: NextApiRequest) {
-  return NextResponse.json({ status: 'Ok', data: 'Hello World' });
+export async function GET(req: Request) {
+  return NextResponse.json({ status: 200, data: [] });
 }
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: Request) {
   if (typeof process.env.INFURA_API_KEY !== 'string') {
     throw new Error('Please, define INFURA_API_KEY in your .env file');
   }
@@ -31,18 +30,34 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     SemaphoreABI,
     signer,
   );
-
-  const { identityCommitment } = req.body;
+  console.log('Contract:', contract.address);
 
   try {
-    const transaction = await contract.joinGroup(identityCommitment);
+    const { groupId, action, identityCommitment } = await req.json();
 
-    await transaction.wait();
+    let hash = '';
+    if (action === 'join') {
+      const tx = await contract['addMember(uint256,uint256)'](
+        groupId,
+        identityCommitment,
+      );
 
-    res.status(200).end();
+      await tx.wait();
+    }
+    if (action === 'leave') {
+      const tx = await contract[
+        'removeMember(uint256,uint256,uint256[],uint8[])'
+      ](groupId, identityCommitment, [], []);
+
+      await tx.wait();
+    }
+
+    return NextResponse.json({ status: 200, message: 'Ok', data: hash });
   } catch (error: any) {
     console.error(error);
 
-    res.status(500).end();
+    return new Response('Unable to join group', {
+      status: 500,
+    });
   }
 }

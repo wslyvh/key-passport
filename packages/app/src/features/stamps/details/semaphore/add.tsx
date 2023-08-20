@@ -1,27 +1,25 @@
 import { PlusIcon } from '@/assets/icons/plus';
 import { useSnaps } from '@/providers/snapsProvider';
 import { Stamp } from '@/types';
+import { manageGroup } from './semaphore';
 
 interface Props {
   stamp: Stamp;
+  onRefresh?: () => void;
 }
 
-export function CreateGroupButton({ stamp }: Props) {
+export function CreateGroupButton(props: Props) {
   const snaps = useSnaps();
 
   async function joinGroup() {
     if (!snaps.account) return;
 
-    console.log('Join Semaphore Group..');
-    const data = JSON.parse(stamp.data);
+    const data = JSON.parse(props.stamp.data);
+    await manageGroup('join', '1337', data.commitment.toString());
 
-    const res = await fetch('api/groups', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        identityCommitment: data.commitment.toString(),
-      }),
-    });
+    if (props.onRefresh) {
+      props.onRefresh();
+    }
   }
 
   return (
@@ -34,10 +32,14 @@ export function CreateGroupButton({ stamp }: Props) {
         className="dropdown-content z-[1] menu p-2 mt-2 shadow bg-base-100 rounded-box w-52"
       >
         <li>
-          <a href="#" className="stat-desc">Create Group (soon)</a>
+          <a href="#" onClick={() => joinGroup()}>
+            Join Group
+          </a>
         </li>
         <li>
-          <a href="#" className="stat-desc">Join Group (soon)</a>
+          <a href="#" className="stat-desc">
+            Create Group (soon)
+          </a>
         </li>
       </ul>
     </div>
