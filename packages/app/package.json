@@ -7,7 +7,9 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next dev",
-    "run:semaphore": "ts-node ./src/scripts/semaphore.ts"
+    "run:index": "ts-node ./src/scripts/index.ts",
+    "run:semaphore:create": "ts-node ./src/scripts/semaphore/create.ts",
+    "run:semaphore:join": "ts-node ./src/scripts/semaphore/join.ts"
   },
   "dependencies": {
     "@ethereum-attestation-service/eas-sdk": "^0.29.1",

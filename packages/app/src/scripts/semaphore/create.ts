@@ -1,17 +1,13 @@
 import { Contract, providers, Wallet } from 'ethers';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import dotenv from 'dotenv';
 import SemaphoreABI from '../../contracts/semaphore.json';
+
+dotenv.config();
 
 export const SEMAPHORE_ADDRESS_SEPOLIA =
   '0x3889927F0B5Eb1a02C6E2C20b39a1Bd4EAd76131';
 
-import { NextResponse } from 'next/server';
-
-export async function GET(req: NextApiRequest) {
-  return NextResponse.json({ status: 'Ok', data: 'Hello World' });
-}
-
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+const run = async () => {
   if (typeof process.env.INFURA_API_KEY !== 'string') {
     throw new Error('Please, define INFURA_API_KEY in your .env file');
   }
@@ -20,9 +16,15 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     throw new Error('Please, define DEPLOYER_KEY in your .env file');
   }
 
+  console.log('Create Semaphore group..');
+
   const ethereumNetwork = process.env.DEFAULT_NETWORK ?? 'sepolia';
   const deployerKey = process.env.DEPLOYER_KEY;
   const infuraApiKey = process.env.INFURA_API_KEY;
+
+  console.log('Network:', ethereumNetwork);
+  console.log('Deployer key:', deployerKey); // NEVER SHARE PRIVATE KEYS
+  console.log('Infura API key:', infuraApiKey);
 
   const provider = new providers.InfuraProvider(ethereumNetwork, infuraApiKey);
   const signer = new Wallet(deployerKey, provider);
@@ -31,18 +33,25 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     SemaphoreABI,
     signer,
   );
+  console.log('Contract:', contract.address);
 
-  const { identityCommitment } = req.body;
+  // groupId (needs to be unique), merkleTreeDepth (default: 20), admin
+  const tx = await contract['createGroup(uint256,uint256,address)'](
+    11111,
+    20,
+    signer.address,
+  );
+  await tx.wait();
 
-  try {
-    const transaction = await contract.joinGroup(identityCommitment);
+  console.log('Group created');
+  console.log(`https://sepolia.etherscan.io/tx/${tx.hash}`)
+};
 
-    await transaction.wait();
-
-    res.status(200).end();
-  } catch (error: any) {
-    console.error(error);
-
-    res.status(500).end();
-  }
-}
+run()
+  .then(() => {
+    process.exit(0);
+  })
+  .catch((err) => {
+    console.log(err);
+    process.exit(1);
+  });
