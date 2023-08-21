@@ -47,7 +47,6 @@ export function List() {
             if (!i.id) return null;
 
             const data = JSON.parse(i.data) as any;
-
             return (
               <Card
                 key={i.id}
@@ -55,6 +54,7 @@ export function List() {
                 type={i.type}
                 created={i.created}
                 creator={data.signer} // only if i.type === eas
+                data={data}
                 private
               />
             );
@@ -72,6 +72,7 @@ export function List() {
                 type="eas"
                 created={i.timeCreated * 1000}
                 creator={i.attester}
+                data={i}
               />
             );
           })}

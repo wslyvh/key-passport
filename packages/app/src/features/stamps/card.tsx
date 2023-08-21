@@ -17,6 +17,7 @@ interface Props {
   created: number;
   creator?: string;
   private?: boolean;
+  data?: any;
 }
 
 export function Card(props: Props) {
@@ -51,6 +52,7 @@ export function Card(props: Props) {
       <Menu
         id={props.id}
         private={props.private}
+        data={props.data}
         url={
           props.type === 'eas' && !props.private
             ? `https://easscan.org/attestation/view/${props.id}`

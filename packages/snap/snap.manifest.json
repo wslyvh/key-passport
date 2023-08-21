@@ -1,18 +1,18 @@
 {
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Manage your your keys, attestations, ZK identities & proofs.",
   "proposedName": "Key Passport",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wslyvh/key-passport.git"
+    "url": "https://github.com/wslyvh/key-passport"
   },
   "source": {
-    "shasum": "gDrU7s936WWnl/IUndtAIsB2MYnxFLTalFFqTuJlcvU=",
+    "shasum": "UW2aa9yIXVRlDe4IpzFdbptvJ4qpHF8NMrTVTegDkM0=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "snap",
+        "packageName": "key-passport",
         "registry": "https://registry.npmjs.org/"
       }
     }
