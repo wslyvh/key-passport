@@ -1,12 +1,26 @@
-# @metamask/template-snap-monorepo
+# Key Passport
 
-This repository demonstrates how to develop a snap with TypeScript. For detailed instructions, see [the MetaMask documentation](https://docs.metamask.io/guide/snaps.html#serving-a-snap-to-your-local-environment).
+Key Passport allows you to manage your identity, attestations, proofs or any kind keys using your existing Ethereum account. It uses Metamask Snaps as a way to deterministically generate keys based on your existing account and stores those safely in their sandboxed environment. Giving full control and sovereignty over your keys and identities.
 
-MetaMask Snaps is a system that allows anyone to safely expand the capabilities of MetaMask. A _snap_ is a program that we run in an isolated environment that can customize the wallet experience.
+## Why
 
-## Snaps is pre-release software
+- Inspired by this cast from Vitalik https://warpcast.com/vitalik.eth/0x576454
+- New chains, layers and applications require new accounts, identities and signature schemes
+- Generate App-specific or ZK-proof credentials to increase privacy
 
-To interact with (your) Snaps, you will need to install [MetaMask Flask](https://metamask.io/flask/), a canary distribution for developers that provides access to upcoming features.
+## What
+
+- A MetaMask Snap to manage and interact with your attestations, identities and keys
+- Deterministic generation based on a single recovery root
+- Upload offchain credentials and proofs
+- All managed and safely stored inside your MetaMask account single recovery root
+
+## Demo
+
+- https://key-passport.vercel.app/
+- NPM https://www.npmjs.com/package/key-passport
+
+---
 
 ## Getting Started
 
