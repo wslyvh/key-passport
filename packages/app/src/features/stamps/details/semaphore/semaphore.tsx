@@ -14,6 +14,7 @@ import { CreateGroupButton } from './add';
 import Link from 'next/link';
 import { EllipsisIcon } from '@/assets/icons/ellipsis';
 import { useSnaps } from '@/providers/snapsProvider';
+import { getGroups } from '@/services/semaphore';
 
 dayjs.extend(relativeTime);
 
@@ -27,19 +28,12 @@ export function SemaphoreDetails({ stamp }: Props) {
   const [groups, setGroups] = useState<GroupResponse[]>([]);
 
   useEffect(() => {
-    async function getGroups() {
-      console.log('Fetch Semaphore groups', stamp.id);
-      const client = new SemaphoreSubgraph();
-      const groups = await client.getGroups({
-        members: true,
-        verifiedProofs: true,
-      });
-
-      const myGroups = groups.filter((i) => i.members?.includes(stamp.id));
-      setGroups(myGroups);
+    async function initGroups() {
+      const groups = await getGroups(stamp.id);
+      setGroups(groups);
     }
 
-    getGroups();
+    initGroups();
   }, []);
 
   async function createProof(group: GroupResponse) {
