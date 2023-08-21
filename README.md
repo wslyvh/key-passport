@@ -20,6 +20,16 @@ Key Passport allows you to manage your identity, attestations, proofs or any kin
 - https://key-passport.vercel.app/
 - NPM https://www.npmjs.com/package/key-passport
 
+## Configuration
+
+You need the following environment variables to run the app
+- INFURA_API_KEY - to create and join Semaphore groups
+- DEPLOYER_KEY - to create and join Semaphore groups
+- NEXT_PUBLIC_SNAP_ORIGIN - location of deployed Snap, e.g. `npm:key-passport`
+  - https://www.npmjs.com/package/key-passport
+
+The app is currently using the deployed version of the [Semaphore protocol](https://semaphore.appliedzkp.org/docs/deployed-contracts) on Sepolia. Only admins can manage groups. You can find scripts to create and join groups under `packages/app/src/scripts`. The admin can be set using the `DEPLOYER_KEY`.
+
 ---
 
 ## Getting Started
