@@ -50,6 +50,13 @@ export function UploadPane() {
           }
         }
 
+        // Semaphore Identity
+        if (data.trapdoor && data.nullifier && data.commitment) {
+          await addStamp('semaphore', data.commitment, JSON.stringify(data));
+          snaps.refreshStamps();
+          router.push('/');
+        }
+
         setError('Unable to verify EAS Attestation.');
       };
     }
@@ -103,7 +110,7 @@ export function UploadPane() {
                   and drop
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  *Currently only supports EAS Attestations.
+                  *Supports EAS attestations and Semaphore identities.
                 </p>
               </>
             )}
